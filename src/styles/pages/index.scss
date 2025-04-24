@@ -1,0 +1,10 @@
+@import '../util';
+
+#hero {
+  width: 100%;
+  height: 100vh;
+  padding: 30rem var(--margin);
+  box-sizing: border-box;
+  overflow: hidden;
+  user-select: none;
+}

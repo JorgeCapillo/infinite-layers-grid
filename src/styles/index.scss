@@ -1,0 +1,41 @@
+@import './grid';
+@import './components';
+
+* {
+  margin: 0;
+  padding: 0;
+}
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+html {
+  background: $white;
+  color: $black;
+  font-size: calc((1 / 1440) * 100vw);
+  overflow: hidden;
+  @media (max-width: 1024px) {
+    font-size: 1px;
+  }
+}
+body {
+  font-family: $font-mono;
+  font-size: 12rem;
+  font-weight: 400;
+  line-height: 1.21;
+  font-optical-sizing: auto;
+  margin: 0;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+.no-transform {
+  &, * {
+    transform: none !important;
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "infinite-layers-grid",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "sass": "^1.66.1",
+    "vite": "^4.3.9"
+  },
+  "dependencies": {
+    "gsap": "^3.12.7"
+  }
+}
