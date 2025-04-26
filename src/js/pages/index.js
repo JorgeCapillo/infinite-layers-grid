@@ -9,15 +9,15 @@ export default class Index {
     this.initGrid();
     
     this.sources = [
-      'image-1.jpg',
-      'image-2.jpg',
-      'image-3.jpg',
-      'image-4.jpg',
-      'image-5.jpg',
-      'image-6.jpg',
-      'image-7.jpg',
-      'image-8.jpg',
-      'image-9.jpg',
+      {src: 'image-1.jpg', caption: '30 knots <br>12 x 16 inch C type hand print <br>Edition of 1 Plus an additional artist Proof <br>2021'},
+      {src: 'image-2.jpg', caption: 'Sad Mis-Step <br>12 x 16 inch C type hand print <br>Edition of 1 Plus an additional artist Proof <br>2024'},
+      {src: 'image-3.jpg', caption: 'Mini Orange <br>12 x 16 inch C type hand print <br>Edition of 1 Plus an additional artist Proof <br>2014'},
+      {src: 'image-4.jpg', caption: 'After Storm <br>12 x 16 inch C type hand print <br>Edition of 1 Plus an additional artist Proof <br>2022'},
+      {src: 'image-5.jpg', caption: 'Untitled <br>12 x 16 inch C type hand print <br>Edition of 1 Plus an additional artist Proof <br>2016'},
+      {src: 'image-6.jpg', caption: 'Toilet Paper <br>12 x 16 inch C type hand print <br>Edition of 1 Plus an additional artist Proof <br>2022'},
+      {src: 'image-7.jpg', caption: 'Cocoa Eggplant Tomato <br>12 x 16 inch C type hand print <br>Edition of 1 Plus an additional artist Proof <br>2025'},
+      {src: 'image-8.jpg', caption: 'Toilet Paper <br>12 x 16 inch C type hand print <br>Edition of 1 Plus an additional artist Proof <br>2022'},
+      {src: 'image-9.jpg', caption: 'Production Fun Fact (Eggs) <br>12 x 16 inch C type hand print <br>Edition of 1 Plus an additional artist Proof <br>2024'},
     ];
     this.data = [
       {x: 71, y: 58, w: 400, h: 270},

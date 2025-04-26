@@ -27,7 +27,11 @@ export default class InfiniteGrid {
     window.addEventListener('resize', this.onResize);
     window.addEventListener('wheel', this.onWheel, { passive: false });
     window.addEventListener('mousemove', this.onMouseMove);
-
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        entry.target.classList.toggle('visible', entry.isIntersecting);
+      });
+    });
     this.onResize();
     this.render();
   }
@@ -54,8 +58,10 @@ export default class InfiniteGrid {
     const baseItems = this.data.map((d, i) => {
       const scaleX = this.tileSize.w / this.originalSize.w;
       const scaleY = this.tileSize.h / this.originalSize.h;
+      const source = this.sources[i % this.sources.length];
       return {
-        src: this.sources[i % this.sources.length],
+        src: source.src,
+        caption: source.caption,
         x:   d.x * scaleX,
         y:   d.y * scaleY,
         w:   d.w * scaleX,
@@ -71,20 +77,35 @@ export default class InfiniteGrid {
     baseItems.forEach(base => {
       repsX.forEach(offsetX => {
         repsY.forEach(offsetY => {
+          const el = document.createElement('div');
+          el.classList.add('item');
+          el.style.width    = `${base.w}px`;
+          const imageContainer = document.createElement('div');
+          imageContainer.classList.add('item-image');
+          imageContainer.style.width  = `${base.w}px`;
+          imageContainer.style.height = `${base.h}px`;
+          el.appendChild(imageContainer);
           const img = new Image();
           img.src = `./img/${base.src}`;
-          img.style.width    = `${base.w}px`;
-          img.style.height   = `${base.h}px`;
-          this.$container.appendChild(img);
+          imageContainer.appendChild(img);
+
+          const caption = document.createElement('small');
+          caption.innerHTML = base.caption;
+          el.appendChild(caption);
+          this.$container.appendChild(el);
+          this.observer.observe(el);
 
           this.items.push({
-            el:     img,
+            el:     el,
+            imageContainer: imageContainer,
+            img:    img,
             x:      base.x + offsetX,
             y:      base.y + offsetY,
             w:      base.w,
             h:      base.h,
             extraX: 0,
             extraY: 0,
+            rect:  el.getBoundingClientRect(),
             ease:   Math.random() * 0.5 + 0.5,
           });
         });
@@ -124,8 +145,8 @@ export default class InfiniteGrid {
     const dirY = this.scroll.current.y > this.scroll.last.y ? 'down'  : 'up';
 
     this.items.forEach(item => {
-      const newX = 5 * this.scroll.delta.x.c * item.ease + (this.mouse.x.c - 0.5) * item.w * 0.6;
-      const newY = 5 * this.scroll.delta.y.c  * item.ease + (this.mouse.y.c - 0.5) * item.h * 0.6;
+      const newX = 5 * this.scroll.delta.x.c * item.ease + (this.mouse.x.c - 0.5) * item.rect.width * 0.6;
+      const newY = 5 * this.scroll.delta.y.c  * item.ease + (this.mouse.y.c - 0.5) * item.rect.height * 0.6;
       const scrollX = this.scroll.current.x;
       const scrollY = this.scroll.current.y;
       const posX = item.x + scrollX + item.extraX + newX;
@@ -133,13 +154,13 @@ export default class InfiniteGrid {
 
       // wrap en X
       const beforeX = posX > this.winW;
-      const afterX  = posX + item.w < 0;
+      const afterX  = posX + item.rect.width < 0;
       if (dirX === 'right' && beforeX) item.extraX -= this.tileSize.w;
       if (dirX === 'left'  && afterX)  item.extraX += this.tileSize.w;
 
       // wrap en Y
       const beforeY = posY > this.winH;
-      const afterY  = posY + item.h < 0;
+      const afterY  = posY + item.rect.height < 0;
       if (dirY === 'down' && beforeY) item.extraY -= this.tileSize.h;
       if (dirY === 'up'   && afterY)  item.extraY += this.tileSize.h;
 
@@ -147,6 +168,7 @@ export default class InfiniteGrid {
       const fx = item.x + scrollX + item.extraX + newX;
       const fy = item.y + scrollY + item.extraY + newY;
       item.el.style.transform = `translate(${fx}px, ${fy}px)`;
+      item.img.style.transform = `scale(1.2) translate(${-this.mouse.x.c * item.ease * 10}%, ${-this.mouse.y.c * item.ease * 10}%)`;
     });
 
     this.scroll.last.x = this.scroll.current.x;
