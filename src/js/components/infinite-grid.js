@@ -9,7 +9,8 @@ export default class InfiniteGrid {
       ease:   0.06,
       current:{ x: 0, y: 0 },
       target: { x: 0, y: 0 },
-      last:   { x: 0, y: 0 }
+      last:   { x: 0, y: 0 },
+      delta: { x: { c: 0, t: 0 }, y: { c: 0, t: 0 } }
     };
     this.mouse = {
       x: { t: 0.5, c: 0.5 },
@@ -110,8 +111,11 @@ export default class InfiniteGrid {
     // easing
     this.scroll.current.x += (this.scroll.target.x - this.scroll.current.x) * this.scroll.ease;
     this.scroll.current.y += (this.scroll.target.y - this.scroll.current.y) * this.scroll.ease;
-    this.deltaX = this.scroll.current.x - this.scroll.last.x;
-    this.deltaY = this.scroll.current.y - this.scroll.last.y;
+
+    this.scroll.delta.x.t = this.scroll.current.x - this.scroll.last.x;
+    this.scroll.delta.y.t = this.scroll.current.y - this.scroll.last.y;
+    this.scroll.delta.x.c += (this.scroll.delta.x.t - this.scroll.delta.x.c) * 0.04;
+    this.scroll.delta.y.c += (this.scroll.delta.y.t - this.scroll.delta.y.c) * 0.04;
     this.mouse.x.c += (this.mouse.x.t - this.mouse.x.c) * 0.04;
     this.mouse.y.c += (this.mouse.y.t - this.mouse.y.c) * 0.04;
 
@@ -120,8 +124,8 @@ export default class InfiniteGrid {
     const dirY = this.scroll.current.y > this.scroll.last.y ? 'down'  : 'up';
 
     this.items.forEach(item => {
-      const newX = 10 * this.deltaX * item.ease + (this.mouse.x.c - 0.5) * item.w * 0.6;
-      const newY = 10 * this.deltaY * item.ease + (this.mouse.y.c - 0.5) * item.h * 0.6;
+      const newX = 10 * this.scroll.delta.x.c * item.ease + (this.mouse.x.c - 0.5) * item.w * 0.6;
+      const newY = 10 * this.scroll.delta.y.c  * item.ease + (this.mouse.y.c - 0.5) * item.h * 0.6;
       const posX = item.x + this.scroll.current.x + item.extraX + newX;
       const posY = item.y + this.scroll.current.y + item.extraY + newY;
 
