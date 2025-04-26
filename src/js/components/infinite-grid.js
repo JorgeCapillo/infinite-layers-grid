@@ -124,10 +124,12 @@ export default class InfiniteGrid {
     const dirY = this.scroll.current.y > this.scroll.last.y ? 'down'  : 'up';
 
     this.items.forEach(item => {
-      const newX = 10 * this.scroll.delta.x.c * item.ease + (this.mouse.x.c - 0.5) * item.w * 0.6;
-      const newY = 10 * this.scroll.delta.y.c  * item.ease + (this.mouse.y.c - 0.5) * item.h * 0.6;
-      const posX = item.x + this.scroll.current.x + item.extraX + newX;
-      const posY = item.y + this.scroll.current.y + item.extraY + newY;
+      const newX = 5 * this.scroll.delta.x.c * item.ease + (this.mouse.x.c - 0.5) * item.w * 0.6;
+      const newY = 5 * this.scroll.delta.y.c  * item.ease + (this.mouse.y.c - 0.5) * item.h * 0.6;
+      const scrollX = this.scroll.current.x;
+      const scrollY = this.scroll.current.y;
+      const posX = item.x + scrollX + item.extraX + newX;
+      const posY = item.y + scrollY + item.extraY + newY;
 
       // wrap en X
       const beforeX = posX > this.winW;
@@ -142,8 +144,8 @@ export default class InfiniteGrid {
       if (dirY === 'up'   && afterY)  item.extraY += this.tileSize.h;
 
       // aplicar transform
-      const fx = item.x + this.scroll.current.x + item.extraX + newX;
-      const fy = item.y + this.scroll.current.y + item.extraY + newY;
+      const fx = item.x + scrollX + item.extraX + newX;
+      const fy = item.y + scrollY + item.extraY + newY;
       item.el.style.transform = `translate(${fx}px, ${fy}px)`;
     });
 
