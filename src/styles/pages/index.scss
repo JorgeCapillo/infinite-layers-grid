@@ -16,6 +16,9 @@
       left: 0;
       will-change: transform;
       white-space: normal;
+      .item-wrapper {
+        will-change: transform;
+      }
       .item-image {
         overflow: hidden;
         img {

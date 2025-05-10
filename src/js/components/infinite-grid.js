@@ -1,3 +1,5 @@
+import gsap from 'gsap';
+
 export default class InfiniteGrid {
   constructor({ el, sources, data, originalSize }) {
     this.$container   = el;
@@ -34,8 +36,38 @@ export default class InfiniteGrid {
     });
     this.onResize();
     this.render();
+    this.initIntro();
+    this.intro();
   }
-
+  initIntro() {
+    this.introItems = [...this.$container.querySelectorAll('.item-wrapper')].filter((item, i) => {
+      const rect = item.getBoundingClientRect();
+      return (
+        rect.x > -rect.width &&
+        rect.x < window.innerWidth + rect.width &&
+        rect.y > -rect.height &&
+        rect.y < window.innerHeight + rect.height
+      );
+    });
+    this.introItems.forEach((item, i) => {
+      const rect = item.getBoundingClientRect();
+      const x = -rect.x + window.innerWidth * 0.5 - rect.width * 0.5;
+      const y = -rect.y + window.innerHeight * 0.5 - rect.height * 0.5;
+      gsap.set(item, {
+        x: x,
+        y: y,
+      });
+    });
+  }
+  intro() {
+    gsap.to(this.introItems.reverse(), {
+      duration: 2,
+      ease: 'expo.inOut',
+      x: 0,
+      y: 0,
+      stagger: 0.05,
+    });
+  }
   onResize() {
     this.winW = window.innerWidth;
     this.winH = window.innerHeight;
@@ -80,24 +112,31 @@ export default class InfiniteGrid {
           const el = document.createElement('div');
           el.classList.add('item');
           el.style.width    = `${base.w}px`;
-          const imageContainer = document.createElement('div');
-          imageContainer.classList.add('item-image');
-          imageContainer.style.width  = `${base.w}px`;
-          imageContainer.style.height = `${base.h}px`;
-          el.appendChild(imageContainer);
+
+          const wrapper = document.createElement('div');
+          wrapper.classList.add('item-wrapper');
+          el.appendChild(wrapper);
+
+          const itemImage = document.createElement('div');
+          itemImage.classList.add('item-image');
+          itemImage.style.width  = `${base.w}px`;
+          itemImage.style.height = `${base.h}px`;
+          wrapper.appendChild(itemImage);
+
           const img = new Image();
           img.src = `./img/${base.src}`;
-          imageContainer.appendChild(img);
+          itemImage.appendChild(img);
 
           const caption = document.createElement('small');
           caption.innerHTML = base.caption;
-          el.appendChild(caption);
+          wrapper.appendChild(caption);
           this.$container.appendChild(el);
           this.observer.observe(el);
 
           this.items.push({
             el:     el,
-            imageContainer: imageContainer,
+            container: itemImage,
+            wrapper: wrapper,
             img:    img,
             x:      base.x + offsetX,
             y:      base.y + offsetY,
