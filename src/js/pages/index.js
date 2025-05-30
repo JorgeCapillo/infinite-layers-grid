@@ -6,7 +6,6 @@ export default class Index {
   constructor() {
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
-    this.initGrid();
     
     this.sources = [
       {src: 'image-1.jpg', caption: '30 knots <br>12 x 16 inch C type hand print <br>Edition of 1 Plus an additional artist Proof <br>2021'},
@@ -35,13 +34,6 @@ export default class Index {
       sources: this.sources,
       data: this.data,
       originalSize: {w: 1522, h: 1238},
-    })
-  }
-  initGrid() {
-    document.addEventListener('keydown', (e) => {
-      if(e.shiftKey && e.key === 'G') {
-        document.getElementById('grid').classList.toggle('show')
-      }
     })
   }
   resize() {
