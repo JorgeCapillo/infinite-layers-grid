@@ -174,6 +174,7 @@ export default class InfiniteGrid {
   onMouseDown(e) {
     e.preventDefault();
     this.isDragging = true;
+    document.documentElement.classList.add('dragging');
     this.mouse.press.t = 1;
     this.drag.startX = e.clientX;
     this.drag.startY = e.clientY;
@@ -183,6 +184,7 @@ export default class InfiniteGrid {
 
   onMouseUp() {
     this.isDragging = false;
+    document.documentElement.classList.remove('dragging');
     this.mouse.press.t = 0;
   }
 
