@@ -37,11 +37,19 @@
         font-size: 8rem;
         line-height: 1.25;
         margin-top: 12rem;
-        transition: opacity 2s $in-out;
+        .line-mask {
+          transition: transform 2s $in-out;
+          .line {
+            transition: transform 2s $in-out;
+          }
+        }
       }
-      &:not(.visible) {
-        small {
-          opacity: 0;
+      small:not(.visible) {
+        .line-mask {
+          transform: translateY(100%);
+          .line {
+            transform: translateY(110%);
+          }
         }
       }
     }

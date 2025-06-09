@@ -1,4 +1,6 @@
 import gsap from 'gsap';
+import { SplitText } from 'gsap/SplitText';
+gsap.registerPlugin(SplitText);
 
 export default class InfiniteGrid {
   constructor({ el, sources, data, originalSize }) {
@@ -135,9 +137,14 @@ export default class InfiniteGrid {
 
           const caption = document.createElement('small');
           caption.innerHTML = base.caption;
+          const split = new SplitText(caption, { type: 'lines', mask: 'lines', linesClass: 'line' });
+          split.lines.forEach((line, i) => {
+            line.style.transitionDelay = `${i * 0.15}s`;
+            line.parentElement.style.transitionDelay = `${i * 0.15}s`;
+          });
           wrapper.appendChild(caption);
           this.$container.appendChild(el);
-          this.observer.observe(el);
+          this.observer.observe(caption);
 
           this.items.push({
             el,
